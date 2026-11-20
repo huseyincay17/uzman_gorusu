@@ -1,4 +1,4 @@
-const CACHE_NAME = 'chroma-key-eval-v2';
+const CACHE_NAME = 'chroma-key-eval-v3';
 const ASSETS = [
   './',
   './index.html',
