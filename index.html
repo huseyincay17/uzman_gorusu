@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Chroma Key Değerlendirme">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <title>Chroma Key Uzman Değerlendirme Paneli</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: calc(14px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 14px;
+            width: 100%;
+            max-width: 960px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+            margin-bottom: 16px;
+        }
+        h2 { margin-top: 0; font-size: 1.35rem; }
+        select, button {
+            width: 100%;
+            padding: 13px 16px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            color: #fff;
+            font-size: 1rem;
+            min-height: 46px;
+        }
+        button {
+            background: var(--accent);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.08s ease, background 0.15s ease;
+        }
+        button:active { transform: scale(0.985); }
+        button:hover { background: var(--accent-hover); }
+        .btn-secondary { background: #475569; border: 1px solid #64748b; color: #fff; }
+        .btn-success { background: #059669; border: 1px solid #10b981; color: #fff; }
+        .btn-danger { background: #dc2626 !important; border: 1px solid #ef4444 !important; color: #fff !important; }
+        .hidden { display: none !important; }
+        
+        .img-container {
+            width: 100%;
+            height: 34vh;
+            max-height: 320px;
+            min-height: 190px;
+            background: #000;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .img-fallback {
+            position: absolute;
+            color: #94a3b8;
+            font-size: 0.88rem;
+            text-align: center;
+            padding: 16px;
+            pointer-events: none;
+        }
+        
+        .progress-bar { width: 100%; height: 7px; background: var(--border-color); border-radius: 4px; margin-bottom: 12px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.25s ease; }
+
+        .likert {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin: 12px 0 14px 0;
+        }
+        .likert label {
+            background: var(--bg-main);
+            border: 2px solid var(--border-color);
+            padding: 11px 6px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70px;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .likert label.selected {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.18);
+        }
+        .likert input {
+            width: 18px;
+            height: 18px;
+            margin: 0 0 6px 0;
+            accent-color: var(--accent);
+        }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; text-align: left; }
+        .stat-card { background: var(--bg-main); border: 1px solid var(--border-color); padding: 16px; border-radius: 10px; }
+        .stat-card h3 { font-size: 0.78rem; color: var(--text-muted); margin: 0 0 6px 0; text-transform: uppercase; }
+        .stat-card .value { font-size: 1.35rem; font-weight: bold; color: #fff; }
+
+        .section-title { font-size: 1.1rem; color: #fff; margin: 22px 0 10px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; text-align: left; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; margin-top: 5px; }
+        th, td { padding: 10px; border-bottom: 1px solid var(--border-color); }
+        th { color: var(--text-muted); font-weight: 600; }
+        
+        .academic-info { background: rgba(15, 23, 42, 0.65); border: 1px solid var(--border-color); padding: 16px; border-radius: 10px; font-size: 0.88rem; line-height: 1.55; color: var(--text-muted); margin-bottom: 15px; text-align: justify; }
+        .badge-storage { display: inline-block; font-size: 0.75rem; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); padding: 4px 10px; border-radius: 999px; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="box" id="step-login">
+        <div class="badge-storage">iPad / Çevrimdışı Otomatik Kayıt Aktif</div>
+        <h2>Chroma Key Uzman Değerlendirme Paneli</h2>
+        
+        <div class="academic-info">
+            Bu değerlendirme formu, <strong>"Sinema ve Televizyon Yapımlarında Renk Ayrıştırma (Chroma Key) Tabanlı Görsel Efekt Üretim Süreçlerinde Karşılaşılan Teknik Sorunlar ve Çözüm Yaklaşımlarının İncelenmesi"</strong> başlıklı yüksek lisans tez çalışması kapsamında, girdi (ham görüntüler) ve çıktı (dikey kurgular) kalitesini ölçmek amacıyla hazırlanmıştır.<br><br>
+            Görüşmeler, Steinar Kvale’nin (1996) 7 Aşamalı Görüşme Modeli (Temalaştırma, Tasarım, Görüşme, Transkripsiyon, Analiz, Teyit, Raporlama) ilkelerine uygun olarak yürütülmektedir. Değerlendirmeleriniz ve kimlik bilgileriniz tamamen gizli tutulacak, yalnızca bilimsel analizlerde (Miles ve Huberman Nitel Veri Analizi matrislerinde) kodlanarak kullanılacaktır. Katkılarınız için teşekkür ederiz.
+        </div>
+
+        <p style="color: #94a3b8; margin: 10px 0;">Lütfen değerlendirmek için katılımcı numaranızı seçiniz:</p>
+        <select id="expert-name">
+            <option value="">-- Katılımcı Seçiniz --</option>
+            <option value="Katılımcı 1">Katılımcı 1</option>
+            <option value="Katılımcı 2">Katılımcı 2</option>
+            <option value="Katılımcı 3">Katılımcı 3</option>
+            <option value="Katılımcı 4">Katılımcı 4</option>
+            <option value="Katılımcı 5">Katılımcı 5</option>
+            <option value="Katılımcı 6">Katılımcı 6</option>
+        </select>
+        <button onclick="startApp()">Değerlendirmeye Başla</button>
+        <button class="btn-secondary" onclick="openAdminPanel()" style="margin-top: 10px;">Analiz Paneline Git (<span id="saved-count">0</span> Kayıt)</button>
+    </div>
+
+    <div class="box hidden" id="step-test">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div>
+                <h3 id="scenario-title" style="margin:0; font-size: 1.05rem;">Senaryo 1 / 10</h3>
+                <span id="question-counter" style="font-size: 0.82rem; color: #94a3b8;">Soru 1 / 9</span>
+            </div>
+            <button class="btn-secondary" onclick="returnHome()" style="width: auto; padding: 8px 14px; margin:0; font-size: 0.85rem; min-height: 38px;">Başa Dön</button>
+        </div>
+        
+        <div class="img-container">
+            <img id="scenario-img" src="" alt="Görsel" onerror="this.style.opacity='0.2'; document.getElementById('img-err').style.display='block';" onload="this.style.opacity='1'; document.getElementById('img-err').style.display='none';">
+            <div id="img-err" class="img-fallback" style="display:none;">Görsel dosyası bulunamadı (001.png - 010.png dosyalarının uygulama klasöründe olduğundan emin olun).</div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="prog-fill"></div>
+        </div>
+
+        <p id="question-text" style="font-weight: 600; margin: 10px 0; text-align: left; font-size: 1.05rem; line-height: 1.35;"></p>
+        
+        <div class="likert" id="likert-group">
+            <label onclick="selectRadio(1)"><input type="radio" name="ans" value="1"><strong>1</strong><span style="font-size:0.72rem; color:#94a3b8; margin-top:3px;">Kesinlikle Katılmıyorum</span></label>
+            <label onclick="selectRadio(2)"><input type="radio" name="ans" value="2"><strong>2</strong><span style="font-size:0.72rem; color:#94a3b8; margin-top:3px;">Katılmıyorum</span></label>
+            <label onclick="selectRadio(3)"><input type="radio" name="ans" value="3"><strong>3</strong><span style="font-size:0.72rem; color:#94a3b8; margin-top:3px;">Kararsızım</span></label>
+            <label onclick="selectRadio(4)"><input type="radio" name="ans" value="4"><strong>4</strong><span style="font-size:0.72rem; color:#94a3b8; margin-top:3px;">Katılıyorum</span></label>
+            <label onclick="selectRadio(5)"><input type="radio" name="ans" value="5"><strong>5</strong><span style="font-size:0.72rem; color:#94a3b8; margin-top:3px;">Kesinlikle Katılıyorum</span></label>
+        </div>
+
+        <button id="next-btn" onclick="nextQuestion()" style="margin-top: 6px;">Sonraki Soru</button>
+    </div>
+
+    <div class="box hidden" id="step-admin" style="max-width: 1100px;">
+        <h2>Analiz Paneli ve Raporlar</h2>
+        <p style="color: #94a3b8; margin: 10px 0 20px 0;">Veriler iPad cihaz hafızasında (LocalStorage) güvenle saklanır. Uygulama kapansa bile silinmez.</p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Toplam Değerlendirme</h3>
+                <div class="value" id="st-total">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Katılan Uzman</h3>
+                <div class="value" id="st-experts">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Genel Ortalama</h3>
+                <div class="value" id="st-avg">0.00 / 5.00</div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 25px;">
+            <button class="btn-success" onclick="exportJSON()">JSON Paylaş / İndir</button>
+            <button class="btn-secondary" onclick="returnHome()">Giriş Ekranına Dön</button>
+            <button class="btn-danger" onclick="clearMemoryData()">Verileri Sıfırla</button>
+        </div>
+
+        <div class="section-title">Katılımcı Bazlı Ortalama Analizi</div>
+        <table>
+            <thead><tr><th>Katılımcı</th><th>Yanıt Sayısı</th><th>Ortalama Puan</th></tr></thead>
+            <tbody id="expert-table-body"></tbody>
+        </table>
+
+        <div class="section-title">Görsel Bazlı Ortalama Analizi</div>
+        <table>
+            <thead><tr><th>Görsel Dosyası</th><th>Yanıt Sayısı</th><th>Ortalama Puan</th></tr></thead>
+            <tbody id="image-table-body"></tbody>
+        </table>
+
+        <div class="section-title">Soru Bazlı Ortalama Analizi</div>
+        <table>
+            <thead><tr><th>Soru İçeriği</th><th>Yanıt Sayısı</th><th>Ortalama Puan</th></tr></thead>
+            <tbody id="question-table-body"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const STORAGE_KEY = "chroma_key_expert_results_v2";
+        const images = ["001.png", "002.png", "003.png", "004.png", "005.png", "006.png", "007.png", "008.png", "009.png", "010.png"];
+        
+        const allQuestions = [
+            "Renk (chroma) perdesi yeterince homojen aydınlatılmıştır.",
+            "Obje ile perde arasında yeterli mesafe bırakılmıştır.",
+            "Renk (chroma) perdesi yeterince düz ve gergindir.",
+            "Renk (chroma) perdesinin rengi yeterince doygun ve tercih edilen renge (yeşil/mavi) yakındır.",
+            "Çekilen obje üzerinde perde rengine yakın bir renk bulunmamaktadır, kıyafet seçiminde perde rengine uzak olan renkler tercih edilmiştir.",
+            "Çekimde resmin doğallığını bozacak herhangi bir difüzyon filtresi kullanılmamıştır.",
+            "Kameranın pozlama ve ısı (kelvin) ayarları düzgün yapılmıştır.",
+            "Kayıt formatı merdivenlenme (aliasing) ve sıkıştırma yapaylığı (compression artifact) yaratmayacak kadar kalitelidir.",
+            "Kayıt formatı renk derinliği (bit depth) 10 bit ve üzeridir.",
+            "Ayrıştırılan objenin kenar kalitesi yeterli seviyededir.",
+            "Ayrıştırılan obje homojen ve opak görünümdedir.",
+            "Ayrıştırılan renk (chroma) perdesi homojen ve şeffaf görünümdedir.",
+            "Renk ayrıştırma için doğru yazılım (software) ve araç (tool) tercih edilmiştir.",
+            "Ayrıştırma işleminden sonra girdi ile çıktı arasında fark (kumlanma, bantlanma, bulanıklaşma) oluşmamıştır. Girdi halen doğal görünümdedir."
+        ];
+
+        const firstGroupParticipants = ["Katılımcı 1", "Katılımcı 2", "Katılımcı 3"];
+        let expert = "";
+        let activeQuestions = [];
+        let imgIndex = 0;
+        let qIndex = 0;
+        let globalResults = loadFromStorage();
+
+        function loadFromStorage() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(globalResults));
+                updateSavedCounter();
+            } catch (e) {
+                alert("Cihaz hafızasına kayıt sırasında bir uyarı oluştu: " + e.message);
+            }
+        }
+
+        function updateSavedCounter() {
+            const el = document.getElementById("saved-count");
+            if (el) el.textContent = globalResults.length;
+        }
+        updateSavedCounter();
+
+        function selectRadio(val) {
+            document.querySelectorAll('#likert-group label').forEach((lbl, idx) => {
+                const radio = lbl.querySelector('input');
+                if (idx + 1 === val) {
+                    radio.checked = true;
+                    lbl.classList.add('selected');
+                } else {
+                    radio.checked = false;
+                    lbl.classList.remove('selected');
+                }
+            });
+        }
+
+        function startApp() {
+            const val = document.getElementById("expert-name").value;
+            if (!val) { alert("Lütfen bir katılımcı seçin!"); return; }
+            expert = val;
+            
+            if (firstGroupParticipants.includes(expert)) {
+                activeQuestions = allQuestions.slice(0, 9);
+            } else {
+                activeQuestions = allQuestions.slice(9, 14);
+            }
+
+            imgIndex = 0;
+            qIndex = 0;
+            document.getElementById("step-login").classList.add("hidden");
+            document.getElementById("step-test").classList.remove("hidden");
+            loadStep();
+        }
+
+        function returnHome() {
+            document.getElementById("step-test").classList.add("hidden");
+            document.getElementById("step-admin").classList.add("hidden");
+            document.getElementById("step-login").classList.remove("hidden");
+            updateSavedCounter();
+        }
+
+        function loadStep() {
+            document.getElementById("scenario-title").textContent = `Senaryo ${imgIndex + 1} / ${images.length}`;
+            document.getElementById("question-counter").textContent = `Soru ${qIndex + 1} / ${activeQuestions.length} (${expert})`;
+            document.getElementById("scenario-img").src = images[imgIndex];
+            document.getElementById("question-text").textContent = activeQuestions[qIndex];
+            
+            const totalSteps = images.length * activeQuestions.length;
+            const currentStep = (imgIndex * activeQuestions.length) + qIndex;
+            const progressPct = (currentStep / totalSteps) * 100;
+            document.getElementById("prog-fill").style.width = `${progressPct}%`;
+
+            document.querySelectorAll('#likert-group label').forEach(lbl => {
+                lbl.classList.remove('selected');
+                lbl.querySelector('input').checked = false;
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextQuestion() {
+            const selected = document.querySelector('input[name="ans"]:checked');
+            if (!selected) { alert("Lütfen bir puan seçin!"); return; }
+
+            const realQuestionNum = firstGroupParticipants.includes(expert) ? (qIndex + 1) : (qIndex + 10);
+
+            globalResults.push({
+                expert: expert,
+                image: images[imgIndex],
+                question: realQuestionNum,
+                score: parseInt(selected.value),
+                timestamp: new Date().toLocaleString('tr-TR')
+            });
+            saveToStorage();
+
+            qIndex++;
+            if (qIndex < activeQuestions.length) {
+                loadStep();
+            } else {
+                qIndex = 0;
+                imgIndex++;
+                if (imgIndex < images.length) {
+                    loadStep();
+                } else {
+                    alert("Tebrikler! 10 görsel için tüm değerlendirmeler tamamlandı ve cihaz hafızasına kaydedildi.");
+                    openAdminPanel();
+                }
+            }
+        }
+
+        function openAdminPanel() {
+            document.getElementById("step-login").classList.add("hidden");
+            document.getElementById("step-test").classList.add("hidden");
+            document.getElementById("step-admin").classList.remove("hidden");
+            renderAnalytics();
+        }
+
+        function clearMemoryData() {
+            if (confirm("Cihaz hafızasındaki tüm değerlendirme verileri kalıcı olarak sıfırlansın mı?")) {
+                globalResults = [];
+                saveToStorage();
+                renderAnalytics();
+                alert("Tüm veriler sıfırlandı.");
+            }
+        }
+
+        function renderAnalytics() {
+            document.getElementById("st-total").textContent = globalResults.length;
+            
+            const uniqueExperts = new Set(globalResults.map(x => x.expert));
+            document.getElementById("st-experts").textContent = uniqueExperts.size;
+            
+            if (globalResults.length > 0) {
+                const avg = (globalResults.reduce((acc, curr) => acc + curr.score, 0) / globalResults.length).toFixed(2);
+                document.getElementById("st-avg").textContent = avg + " / 5.00";
+            } else {
+                document.getElementById("st-avg").textContent = "0.00 / 5.00";
+            }
+
+            const expertMap = {};
+            globalResults.forEach(item => {
+                if (!expertMap[item.expert]) expertMap[item.expert] = { count: 0, totalScore: 0 };
+                expertMap[item.expert].count++;
+                expertMap[item.expert].totalScore += item.score;
+            });
+            const expertBody = document.getElementById("expert-table-body");
+            expertBody.innerHTML = "";
+            for (let exp in expertMap) {
+                const avgScore = (expertMap[exp].totalScore / expertMap[exp].count).toFixed(2);
+                expertBody.innerHTML += `<tr><td>${exp}</td><td>${expertMap[exp].count}</td><td><strong>${avgScore} / 5.00</strong></td></tr>`;
+            }
+            if (Object.keys(expertMap).length === 0) {
+                expertBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#94a3b8;">Henüz kayıt bulunmuyor.</td></tr>`;
+            }
+
+            const imageMap = {};
+            images.forEach(img => imageMap[img] = { count: 0, totalScore: 0 });
+            globalResults.forEach(item => {
+                if (imageMap[item.image]) {
+                    imageMap[item.image].count++;
+                    imageMap[item.image].totalScore += item.score;
+                }
+            });
+            const imageBody = document.getElementById("image-table-body");
+            imageBody.innerHTML = "";
+            images.forEach(img => {
+                const data = imageMap[img];
+                const avgScore = data.count > 0 ? (data.totalScore / data.count).toFixed(2) : "0.00";
+                imageBody.innerHTML += `<tr><td>${img}</td><td>${data.count}</td><td><strong>${avgScore} / 5.00</strong></td></tr>`;
+            });
+
+            const questionBody = document.getElementById("question-table-body");
+            questionBody.innerHTML = "";
+            for(let i=1; i<=14; i++) {
+                const matchedResults = globalResults.filter(item => item.question === i);
+                const count = matchedResults.length;
+                const totalScore = matchedResults.reduce((sum, item) => sum + item.score, 0);
+                const avgScore = count > 0 ? (totalScore / count).toFixed(2) : "0.00";
+                questionBody.innerHTML += `<tr><td>${allQuestions[i-1]}</td><td>${count}</td><td><strong>${avgScore} / 5.00</strong></td></tr>`;
+            }
+        }
+
+        async function exportJSON() {
+            const data = JSON.stringify(globalResults, null, 2);
+            const fileName = `chroma_degerlendirmeler_${new Date().toISOString().slice(0,10)}.json`;
+            const file = new File([data], fileName, { type: "application/json" });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Chroma Key Uzman Değerlendirmeleri',
+                        text: 'Yüksek lisans tez çalışması uzman görüşü JSON verileri.'
+                    });
+                    return;
+                } catch (err) {
+                    if (err.name === 'AbortError') return;
+                }
+            }
+
+            const blob = new Blob([data], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+    </script>
+</body>
+</html>

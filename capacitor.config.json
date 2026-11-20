@@ -1,0 +1,9 @@
+{
+  "appId": "tr.edu.yildiz.chromakeyeval",
+  "appName": "Chroma Key Değerlendirme",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "ios": {
+    "contentInset": "always"
+  }
+}
