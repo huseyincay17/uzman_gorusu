@@ -73,30 +73,27 @@
         .btn-danger { background: #dc2626 !important; border: 1px solid #ef4444 !important; color: #fff !important; }
         .hidden { display: none !important; }
         
+        /* Siyah arka plan ve çerçeve tamamen kaldırıldı; görsel doğrudan ana koyu mavi zemin üzerinde */
         .img-container {
             width: 100%;
             height: 73.7vh;
             max-height: 774px;
             min-height: 412px;
-            background: #000;
-            border-radius: 8px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             margin-bottom: 8px;
-            border: 1px solid var(--border-color);
             position: relative;
-            transition: border-color 0.25s ease, box-shadow 0.25s ease;
-        }
-        .img-container.flash-change {
-            border-color: #00b140;
-            box-shadow: 0 0 0 3px rgba(0, 177, 64, 0.45);
         }
         img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            border-radius: 6px;
         }
         .img-fallback {
             position: absolute;
@@ -386,17 +383,14 @@
         function notifyImageChange(newIndex) {
             const toast = document.getElementById("img-change-toast");
             const toastTitle = document.getElementById("toast-title-text");
-            const box = document.getElementById("img-box");
-            if (!toast || !toastTitle || !box) return;
+            if (!toast || !toastTitle) return;
 
             toastTitle.textContent = `Senaryo ${newIndex + 1} / ${images.length}`;
             toast.classList.add("show");
-            box.classList.add("flash-change");
 
             if (toastTimer) clearTimeout(toastTimer);
             toastTimer = setTimeout(() => {
                 toast.classList.remove("show");
-                box.classList.remove("flash-change");
             }, 2200);
         }
 
