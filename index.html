@@ -29,7 +29,7 @@
             color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
             margin: 0;
-            padding: calc(16px + env(safe-area-inset-top)) calc(18px + env(safe-area-inset-right)) calc(26px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left));
+            padding: calc(8px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left));
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -40,24 +40,24 @@
         .box {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            padding: 22px;
-            border-radius: 14px;
+            padding: 12px 14px;
+            border-radius: 12px;
             width: 100%;
-            max-width: 960px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-            margin-bottom: 18px;
+            max-width: 1020px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+            margin-bottom: 10px;
         }
-        h2 { margin-top: 0; font-size: 1.35rem; }
+        h2 { margin-top: 0; font-size: 1.25rem; }
         select, button {
             width: 100%;
-            padding: 14px 16px;
-            margin-top: 12px;
-            border-radius: 10px;
+            padding: 11px 14px;
+            margin-top: 8px;
+            border-radius: 9px;
             border: 1px solid var(--border-color);
             background: var(--bg-main);
             color: #fff;
-            font-size: 1rem;
-            min-height: 48px;
+            font-size: 0.96rem;
+            min-height: 42px;
         }
         button {
             background: var(--accent);
@@ -73,19 +73,19 @@
         .btn-danger { background: #dc2626 !important; border: 1px solid #ef4444 !important; color: #fff !important; }
         .hidden { display: none !important; }
         
-        /* Büyük görünüme yakın, sadece çok az küçültülmüş görsel alanı */
+        /* Görsele daha fazla yer açıldı, çerçeve daraltıldı */
         .img-container {
             width: 100%;
-            height: 48vh;
-            max-height: 500px;
-            min-height: 270px;
+            height: 55vh;
+            max-height: 580px;
+            min-height: 310px;
             background: #000;
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             border: 1px solid var(--border-color);
             position: relative;
         }
@@ -97,59 +97,61 @@
         .img-fallback {
             position: absolute;
             color: #94a3b8;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             text-align: center;
-            padding: 16px;
+            padding: 12px;
             pointer-events: none;
         }
         
-        .progress-bar { width: 100%; height: 7px; background: var(--border-color); border-radius: 4px; margin-bottom: 12px; overflow: hidden; }
+        .progress-bar { width: 100%; height: 5px; background: var(--border-color); border-radius: 3px; margin-bottom: 8px; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.25s ease; }
 
+        /* Değerlendirme kutucukları daraltıldı */
         .likert {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin: 14px 0;
+            gap: 6px;
+            margin: 8px 0 8px 0;
         }
         .likert label {
             background: var(--bg-main);
-            border: 2px solid var(--border-color);
-            padding: 12px 6px;
-            border-radius: 10px;
+            border: 1.5px solid var(--border-color);
+            padding: 6px 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.86rem;
+            font-size: 0.78rem;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 74px;
+            min-height: 48px;
+            line-height: 1.15;
             transition: border-color 0.15s, background 0.15s;
         }
         .likert label.selected {
             border-color: var(--accent);
-            background: rgba(59, 130, 246, 0.18);
+            background: rgba(59, 130, 246, 0.2);
         }
         .likert input {
-            width: 18px;
-            height: 18px;
-            margin: 0 0 6px 0;
+            width: 15px;
+            height: 15px;
+            margin: 0 0 3px 0;
             accent-color: var(--accent);
         }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; text-align: left; }
-        .stat-card { background: var(--bg-main); border: 1px solid var(--border-color); padding: 16px; border-radius: 10px; }
-        .stat-card h3 { font-size: 0.78rem; color: var(--text-muted); margin: 0 0 6px 0; text-transform: uppercase; }
-        .stat-card .value { font-size: 1.35rem; font-weight: bold; color: #fff; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; text-align: left; }
+        .stat-card { background: var(--bg-main); border: 1px solid var(--border-color); padding: 14px; border-radius: 9px; }
+        .stat-card h3 { font-size: 0.75rem; color: var(--text-muted); margin: 0 0 5px 0; text-transform: uppercase; }
+        .stat-card .value { font-size: 1.3rem; font-weight: bold; color: #fff; }
 
-        .section-title { font-size: 1.1rem; color: #fff; margin: 22px 0 10px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; text-align: left; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; margin-top: 5px; }
-        th, td { padding: 10px; border-bottom: 1px solid var(--border-color); }
+        .section-title { font-size: 1.05rem; color: #fff; margin: 18px 0 8px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; text-align: left; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; margin-top: 4px; }
+        th, td { padding: 8px 10px; border-bottom: 1px solid var(--border-color); }
         th { color: var(--text-muted); font-weight: 600; }
         
-        .academic-info { background: rgba(15, 23, 42, 0.65); border: 1px solid var(--border-color); padding: 16px; border-radius: 10px; font-size: 0.88rem; line-height: 1.55; color: var(--text-muted); margin-bottom: 15px; text-align: justify; }
-        .badge-storage { display: inline-block; font-size: 0.75rem; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); padding: 4px 10px; border-radius: 999px; margin-bottom: 12px; }
+        .academic-info { background: rgba(15, 23, 42, 0.65); border: 1px solid var(--border-color); padding: 14px; border-radius: 9px; font-size: 0.86rem; line-height: 1.5; color: var(--text-muted); margin-bottom: 12px; text-align: justify; }
+        .badge-storage { display: inline-block; font-size: 0.72rem; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); padding: 3px 9px; border-radius: 999px; margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -163,7 +165,7 @@
             Görüşmeler, Steinar Kvale’nin (1996) 7 Aşamalı Görüşme Modeli (Temalaştırma, Tasarım, Görüşme, Transkripsiyon, Analiz, Teyit, Raporlama) ilkelerine uygun olarak yürütülmektedir. Değerlendirmeleriniz ve kimlik bilgileriniz tamamen gizli tutulacak, yalnızca bilimsel analizlerde (Miles ve Huberman Nitel Veri Analizi matrislerinde) kodlanarak kullanılacaktır. Katkılarınız için teşekkür ederiz.
         </div>
 
-        <p style="color: #94a3b8; margin: 10px 0;">Lütfen değerlendirmek için katılımcı numaranızı seçiniz:</p>
+        <p style="color: #94a3b8; margin: 8px 0;">Lütfen değerlendirmek için katılımcı numaranızı seçiniz:</p>
         <select id="expert-name">
             <option value="">-- Katılımcı Seçiniz --</option>
             <option value="Katılımcı 1">Katılımcı 1</option>
@@ -174,16 +176,16 @@
             <option value="Katılımcı 6">Katılımcı 6</option>
         </select>
         <button onclick="startApp()">Değerlendirmeye Başla</button>
-        <button class="btn-secondary" onclick="openAdminPanel()" style="margin-top: 10px;">Analiz Paneline Git (<span id="saved-count">0</span> Kayıt)</button>
+        <button class="btn-secondary" onclick="openAdminPanel()" style="margin-top: 8px;">Analiz Paneline Git (<span id="saved-count">0</span> Kayıt)</button>
     </div>
 
     <div class="box hidden" id="step-test">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <div>
-                <h3 id="scenario-title" style="margin:0; font-size: 1.05rem;">Senaryo 1 / 10</h3>
-                <span id="question-counter" style="font-size: 0.82rem; color: #94a3b8;">Soru 1 / 9</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <div style="display: flex; align-items: baseline; gap: 10px;">
+                <h3 id="scenario-title" style="margin:0; font-size: 0.98rem;">Senaryo 1 / 10</h3>
+                <span id="question-counter" style="font-size: 0.78rem; color: #94a3b8;">Soru 1 / 9</span>
             </div>
-            <button class="btn-secondary" onclick="returnHome()" style="width: auto; padding: 8px 14px; margin:0; font-size: 0.85rem; min-height: 38px;">Başa Dön</button>
+            <button class="btn-secondary" onclick="returnHome()" style="width: auto; padding: 5px 11px; margin:0; font-size: 0.78rem; min-height: 30px;">Başa Dön</button>
         </div>
         
         <div class="img-container">
@@ -195,22 +197,22 @@
             <div class="progress-fill" id="prog-fill"></div>
         </div>
 
-        <p id="question-text" style="font-weight: 600; margin: 10px 0; text-align: left; font-size: 1.05rem; line-height: 1.35;"></p>
+        <p id="question-text" style="font-weight: 600; margin: 6px 0; text-align: left; font-size: 0.96rem; line-height: 1.25;"></p>
         
         <div class="likert" id="likert-group">
-            <label onclick="selectRadio(1)"><input type="radio" name="ans" value="1"><strong>1</strong><span style="font-size:0.72rem; color:#94a3b8; margin-top:3px;">Kesinlikle Katılmıyorum</span></label>
-            <label onclick="selectRadio(2)"><input type="radio" name="ans" value="2"><strong>2</strong><span style="font-size:0.72rem; color:#94a3b8; margin-top:3px;">Katılmıyorum</span></label>
-            <label onclick="selectRadio(3)"><input type="radio" name="ans" value="3"><strong>3</strong><span style="font-size:0.72rem; color:#94a3b8; margin-top:3px;">Kararsızım</span></label>
-            <label onclick="selectRadio(4)"><input type="radio" name="ans" value="4"><strong>4</strong><span style="font-size:0.72rem; color:#94a3b8; margin-top:3px;">Katılıyorum</span></label>
-            <label onclick="selectRadio(5)"><input type="radio" name="ans" value="5"><strong>5</strong><span style="font-size:0.72rem; color:#94a3b8; margin-top:3px;">Kesinlikle Katılıyorum</span></label>
+            <label onclick="selectRadio(1)"><input type="radio" name="ans" value="1"><strong>1</strong><span style="font-size:0.68rem; color:#94a3b8; margin-top:2px;">Kesinlikle Katılmıyorum</span></label>
+            <label onclick="selectRadio(2)"><input type="radio" name="ans" value="2"><strong>2</strong><span style="font-size:0.68rem; color:#94a3b8; margin-top:2px;">Katılmıyorum</span></label>
+            <label onclick="selectRadio(3)"><input type="radio" name="ans" value="3"><strong>3</strong><span style="font-size:0.68rem; color:#94a3b8; margin-top:2px;">Kararsızım</span></label>
+            <label onclick="selectRadio(4)"><input type="radio" name="ans" value="4"><strong>4</strong><span style="font-size:0.68rem; color:#94a3b8; margin-top:2px;">Katılıyorum</span></label>
+            <label onclick="selectRadio(5)"><input type="radio" name="ans" value="5"><strong>5</strong><span style="font-size:0.68rem; color:#94a3b8; margin-top:2px;">Kesinlikle Katılıyorum</span></label>
         </div>
 
-        <button id="next-btn" onclick="nextQuestion()" style="margin-top: 6px;">Sonraki Soru</button>
+        <button id="next-btn" onclick="nextQuestion()" style="margin-top: 4px; padding: 10px 14px; min-height: 40px;">Sonraki Soru</button>
     </div>
 
     <div class="box hidden" id="step-admin" style="max-width: 1100px;">
         <h2>Analiz Paneli ve Raporlar</h2>
-        <p style="color: #94a3b8; margin: 10px 0 20px 0;">Veriler iPad cihaz hafızasında (LocalStorage) güvenle saklanır. Uygulama kapansa bile silinmez.</p>
+        <p style="color: #94a3b8; margin: 8px 0 16px 0;">Veriler iPad cihaz hafızasında (LocalStorage) güvenle saklanır. Uygulama kapansa bile silinmez.</p>
         
         <div class="stats-grid">
             <div class="stat-card">
@@ -227,7 +229,7 @@
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 25px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 20px;">
             <button class="btn-success" onclick="exportJSON()">JSON Paylaş / İndir</button>
             <button class="btn-secondary" onclick="returnHome()">Giriş Ekranına Dön</button>
             <button class="btn-danger" onclick="clearMemoryData()">Verileri Sıfırla</button>
