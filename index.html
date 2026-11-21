@@ -73,7 +73,6 @@
         .btn-danger { background: #dc2626 !important; border: 1px solid #ef4444 !important; color: #fff !important; }
         .hidden { display: none !important; }
         
-        /* Dikey boyut %5 daha genişletildi */
         .img-container {
             width: 100%;
             height: 71vh;
@@ -106,7 +105,7 @@
         .progress-bar { width: 100%; height: 5px; background: var(--border-color); border-radius: 3px; margin-bottom: 6px; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.25s ease; }
 
-        /* Sabit yükseklikli soru alanı: kısa veya uzun soruda alttaki kutular kaymaz */
+        /* Sabit yükseklikli soru alanı */
         .question-box {
             height: 52px;
             min-height: 52px;
@@ -126,6 +125,7 @@
             width: 100%;
         }
 
+        /* Derecelendirme kutuları dikey yönde bir tık büyütüldü */
         .likert {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -135,18 +135,18 @@
         .likert label {
             background: var(--bg-main);
             border: 1.5px solid var(--border-color);
-            padding: 6px 4px;
+            padding: 9px 4px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 48px;
-            min-height: 48px;
-            line-height: 1.15;
+            height: 58px;
+            min-height: 58px;
+            line-height: 1.18;
             transition: border-color 0.15s, background 0.15s;
         }
         .likert label.selected {
@@ -154,9 +154,9 @@
             background: rgba(59, 130, 246, 0.2);
         }
         .likert input {
-            width: 15px;
-            height: 15px;
-            margin: 0 0 3px 0;
+            width: 16px;
+            height: 16px;
+            margin: 0 0 4px 0;
             accent-color: var(--accent);
         }
 
