@@ -73,12 +73,12 @@
         .btn-danger { background: #dc2626 !important; border: 1px solid #ef4444 !important; color: #fff !important; }
         .hidden { display: none !important; }
         
-        /* Görsele daha fazla yer açıldı, çerçeve daraltıldı */
+        /* Dikey boyut %5 daha genişletildi */
         .img-container {
             width: 100%;
-            height: 68vh;
-            max-height: 710px;
-            min-height: 378px;
+            height: 71vh;
+            max-height: 745px;
+            min-height: 397px;
             background: #000;
             border-radius: 8px;
             display: flex;
@@ -103,15 +103,34 @@
             pointer-events: none;
         }
         
-        .progress-bar { width: 100%; height: 5px; background: var(--border-color); border-radius: 3px; margin-bottom: 8px; overflow: hidden; }
+        .progress-bar { width: 100%; height: 5px; background: var(--border-color); border-radius: 3px; margin-bottom: 6px; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.25s ease; }
 
-        /* Değerlendirme kutucukları daraltıldı */
+        /* Sabit yükseklikli soru alanı: kısa veya uzun soruda alttaki kutular kaymaz */
+        .question-box {
+            height: 52px;
+            min-height: 52px;
+            max-height: 52px;
+            display: flex;
+            align-items: center;
+            overflow-y: auto;
+            margin: 4px 0 6px 0;
+            padding: 2px 0;
+        }
+        #question-text {
+            font-weight: 600;
+            margin: 0;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.28;
+            width: 100%;
+        }
+
         .likert {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 6px;
-            margin: 8px 0 8px 0;
+            margin: 6px 0 8px 0;
         }
         .likert label {
             background: var(--bg-main);
@@ -125,6 +144,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            height: 48px;
             min-height: 48px;
             line-height: 1.15;
             transition: border-color 0.15s, background 0.15s;
@@ -197,7 +217,9 @@
             <div class="progress-fill" id="prog-fill"></div>
         </div>
 
-        <p id="question-text" style="font-weight: 600; margin: 6px 0; text-align: left; font-size: 0.96rem; line-height: 1.25;"></p>
+        <div class="question-box">
+            <p id="question-text"></p>
+        </div>
         
         <div class="likert" id="likert-group">
             <label onclick="selectRadio(1)"><input type="radio" name="ans" value="1"><strong>1</strong><span style="font-size:0.68rem; color:#94a3b8; margin-top:2px;">Kesinlikle Katılmıyorum</span></label>
