@@ -73,11 +73,12 @@
         .btn-danger { background: #dc2626 !important; border: 1px solid #ef4444 !important; color: #fff !important; }
         .hidden { display: none !important; }
         
+        /* Görsel dikey yönde %2 genişletildi */
         .img-container {
             width: 100%;
-            height: 71vh;
-            max-height: 745px;
-            min-height: 397px;
+            height: 72.5vh;
+            max-height: 760px;
+            min-height: 405px;
             background: #000;
             border-radius: 8px;
             display: flex;
@@ -87,6 +88,11 @@
             margin-bottom: 8px;
             border: 1px solid var(--border-color);
             position: relative;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .img-container.flash-change {
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.35);
         }
         img {
             width: 100%;
@@ -100,6 +106,30 @@
             text-align: center;
             padding: 12px;
             pointer-events: none;
+        }
+
+        /* Görsel değiştiğinde kullanıcıyı bilgilendiren banner */
+        .img-change-toast {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: rgba(16, 185, 129, 0.95);
+            color: #06281e;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 8px 18px;
+            border-radius: 999px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 20;
+            white-space: nowrap;
+        }
+        .img-change-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
         
         .progress-bar { width: 100%; height: 5px; background: var(--border-color); border-radius: 3px; margin-bottom: 6px; overflow: hidden; }
@@ -125,7 +155,7 @@
             width: 100%;
         }
 
-        /* Derecelendirme kutuları dikey yönde bir tık büyütüldü */
+        /* Derecelendirme kutuları */
         .likert {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -208,7 +238,8 @@
             <button class="btn-secondary" onclick="returnHome()" style="width: auto; padding: 5px 11px; margin:0; font-size: 0.78rem; min-height: 30px;">Başa Dön</button>
         </div>
         
-        <div class="img-container">
+        <div class="img-container" id="img-box">
+            <div id="img-change-toast" class="img-change-toast">Yeni Görsele Geçildi: Senaryo 2 / 10</div>
             <img id="scenario-img" src="" alt="Görsel" onerror="this.style.opacity='0.2'; document.getElementById('img-err').style.display='block';" onload="this.style.opacity='1'; document.getElementById('img-err').style.display='none';">
             <div id="img-err" class="img-fallback" style="display:none;">Görsel dosyası bulunamadı (001.png - 010.png dosyalarının uygulama klasöründe olduğundan emin olun).</div>
         </div>
@@ -302,6 +333,7 @@
         let activeQuestions = [];
         let imgIndex = 0;
         let qIndex = 0;
+        let toastTimer = null;
         let globalResults = loadFromStorage();
 
         function loadFromStorage() {
@@ -327,6 +359,22 @@
             if (el) el.textContent = globalResults.length;
         }
         updateSavedCounter();
+
+        function notifyImageChange(newIndex) {
+            const toast = document.getElementById("img-change-toast");
+            const box = document.getElementById("img-box");
+            if (!toast || !box) return;
+
+            toast.textContent = `Yeni Görsele Geçildi: Senaryo ${newIndex + 1} / ${images.length}`;
+            toast.classList.add("show");
+            box.classList.add("flash-change");
+
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove("show");
+                box.classList.remove("flash-change");
+            }, 2400);
+        }
 
         function selectRadio(val) {
             document.querySelectorAll('#likert-group label').forEach((lbl, idx) => {
@@ -356,7 +404,7 @@
             qIndex = 0;
             document.getElementById("step-login").classList.add("hidden");
             document.getElementById("step-test").classList.remove("hidden");
-            loadStep();
+            loadStep(true);
         }
 
         function returnHome() {
@@ -366,7 +414,7 @@
             updateSavedCounter();
         }
 
-        function loadStep() {
+        function loadStep(isImageChanged = false) {
             document.getElementById("scenario-title").textContent = `Senaryo ${imgIndex + 1} / ${images.length}`;
             document.getElementById("question-counter").textContent = `Soru ${qIndex + 1} / ${activeQuestions.length} (${expert})`;
             document.getElementById("scenario-img").src = images[imgIndex];
@@ -381,6 +429,11 @@
                 lbl.classList.remove('selected');
                 lbl.querySelector('input').checked = false;
             });
+
+            if (isImageChanged) {
+                notifyImageChange(imgIndex);
+            }
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -401,12 +454,12 @@
 
             qIndex++;
             if (qIndex < activeQuestions.length) {
-                loadStep();
+                loadStep(false);
             } else {
                 qIndex = 0;
                 imgIndex++;
                 if (imgIndex < images.length) {
-                    loadStep();
+                    loadStep(true);
                 } else {
                     alert("Tebrikler! 10 görsel için tüm değerlendirmeler tamamlandı ve cihaz hafızasına kaydedildi.");
                     openAdminPanel();
