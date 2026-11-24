@@ -236,15 +236,15 @@
             Görüşmeler, Steinar Kvale’nin (1996) 7 Aşamalı Görüşme Modeli (Temalaştırma, Tasarım, Görüşme, Transkripsiyon, Analiz, Teyit, Raporlama) ilkelerine uygun olarak yürütülmektedir. Değerlendirmeleriniz ve kimlik bilgileriniz tamamen gizli tutulacak, yalnızca bilimsel analizlerde (Miles ve Huberman Nitel Veri Analizi matrislerinde) kodlanarak kullanılacaktır. Katkılarınız için teşekkür ederiz.
         </div>
 
-        <p style="color: #94a3b8; margin: 8px 0;">Lütfen değerlendirmek için katılımcı numaranızı seçiniz:</p>
+        <p style="color: #94a3b8; margin: 8px 0;">Lütfen değerlendirmek için katılımcı kodunuzu seçiniz:</p>
         <select id="expert-name">
             <option value="">-- Katılımcı Seçiniz --</option>
-            <option value="Katılımcı 1">Katılımcı 1</option>
-            <option value="Katılımcı 2">Katılımcı 2</option>
-            <option value="Katılımcı 3">Katılımcı 3</option>
-            <option value="Katılımcı 4">Katılımcı 4</option>
-            <option value="Katılımcı 5">Katılımcı 5</option>
-            <option value="Katılımcı 6">Katılımcı 6</option>
+            <option value="Katılımcı A">Katılımcı A</option>
+            <option value="Katılımcı B">Katılımcı B</option>
+            <option value="Katılımcı C">Katılımcı C</option>
+            <option value="Katılımcı D">Katılımcı D</option>
+            <option value="Katılımcı E">Katılımcı E</option>
+            <option value="Katılımcı F">Katılımcı F</option>
         </select>
         <button onclick="startApp()">Değerlendirmeye Başla</button>
         <button class="btn-secondary" onclick="openAdminPanel()" style="margin-top: 8px;">Analiz Paneline Git (<span id="saved-count">0</span> Kayıt)</button>
@@ -348,7 +348,7 @@
             "Ayrıştırma işleminden sonra girdi ile çıktı arasında fark (kumlanma, bantlanma, bulanıklaşma) oluşmamıştır. Girdi halen doğal görünümdedir."
         ];
 
-        const firstGroupParticipants = ["Katılımcı 1", "Katılımcı 2", "Katılımcı 3"];
+        const firstGroupParticipants = ["Katılımcı A", "Katılımcı B", "Katılımcı C"];
         let expert = "";
         let activeQuestions = [];
         let imgIndex = 0;
